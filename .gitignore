@@ -1,49 +1,70 @@
 # History files
 .Rhistory
 .Rapp.history
-
 # Session Data files
 .RData
-.RDataTmp
-
 # User-specific files
 .Ruserdata
-
 # Example code in package build process
 *-Ex.R
-
 # Output files from R CMD build
 /*.tar.gz
-
 # Output files from R CMD check
 /*.Rcheck/
-
 # RStudio files
 .Rproj.user/
-
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
-
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
-
 # knitr and R markdown default cache directories
 *_cache/
 /cache/
-
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
-
 # R Environment Variables
 .Renviron
+# R Proj
+*.Rproj
+# data
+data - clean/*
+data - raw/*
+.RDataTmp
+# output
+*.bmp
+*.html
+*.pdf
+*.csv
+*.tex
+*.log
+*.rds
+*.RDS
+*.png
+test.png
+brfss_final.rds
+yrbs_final.rds
+brfss_final.RDS
+yrbs_final.RDS
+brfss14.rds
+brfss15.rds
+brfss16.rds
+brfss17.rds
+brfss18.rds
+brfss19.rds
+brfss20.rds
+brfss21.rds
+combined.rds
+brfss.rds
+SOGI_03_Prepared Combined Dataset.R
+.RDataTmp1
 
-# pkgdown site
-docs/
+tables/*
+tables/SO_Q1/*
+tables/SO_Q2/*
+tables/SO_Q3/*
+tables/SO_Q4/*
+tables/SO_Q5/*
 
-# translation temp files
-po/*~
-
-# RStudio Connect folder
-rsconnect/
+*.txt
