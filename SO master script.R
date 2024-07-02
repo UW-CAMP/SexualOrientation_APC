@@ -32,11 +32,3 @@ source("SOGI_14_SO_Q3.R") # Carry out chi-sq tests across period
 source("SOGI_14_SO_Q4.R") # Carry out pairwise t-tests across cohorts
 source("SOGI_14_SO_Q5.R") # fit A/P/C/AP/AC/PC models for dko/ref & descriptives for yrbs 2021
 
-# GI Analyses
-source("SOGI_21_GI_prepare.R") # prepare objects for GI analyses
-source("SOGI_22_GI_analyses.R") # GI analyses
-
-# SSP Analyses
-source("SOGI_31_SSP_prepare") # prepare objects for SSP analyses
-source("SOGI_32_SSP_analyses") # SSP analyses 
-
