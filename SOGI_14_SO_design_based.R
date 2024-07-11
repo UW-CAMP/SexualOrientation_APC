@@ -101,6 +101,11 @@ prevs <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
                design = brfss_des,
                svymean)
 
+
+prevs_age_per_brfss <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
+                            by = ~sex + period + age,
+                            design = brfss_des,
+                            svymean)
 ## YRBS ####
 
 prevs_yrbs <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
@@ -136,6 +141,14 @@ names(prevs)[names(prevs) %in% paste(c("lesgay","bi", "dko", "ref"),
   paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
 
 names(prevs)
+
+
+names(prevs_age_per_brfss)[names(prevs_age_per_brfss) %in%
+                             paste(c("lesgay","bi", "dko", "ref"),
+                                   "bin", sep = "_")] <- 
+  paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
+
+names(prevs_age_per_brfss)
 
 ### YRBS ####
 names(prevs_yrbs)[names(prevs_yrbs) %in% paste(c("lesgay","bi", "dko", "ref"),
@@ -182,6 +195,20 @@ prevs_long <- prevs %>%
 
 write.csv(prevs_long, row.names = FALSE,
           file = paste0("data - clean/", "BRFSS_HT_prevs.csv"))
+
+prevs_age_per_brfss_long <- prevs_age_per_brfss %>% 
+  pivot_longer(cols = contains("_bin"),
+               names_to = c(".value", "so"),
+               names_pattern = "(.*)\\.(.*)_bin") %>% 
+  ## Calculate logit(phat)
+  ## And var(logit(phat)) = var(phat)/[phat^2*(1-phat)^2]
+  ## via delta method
+  mutate(logit_pijk = logit(mean),
+         var = se^2,
+         var_logit_pijk = var/(mean^2*(1-mean)^2))
+
+write.csv(prevs_age_per_brfss_long, row.names = FALSE,
+          file = paste0("data - clean/", "BRFSS_HT_AP_prevs.csv"))
 
 ### YRBS ####
 prevs_yrbs_long <- prevs_yrbs %>% 
