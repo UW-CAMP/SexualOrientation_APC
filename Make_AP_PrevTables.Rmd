@@ -1,0 +1,200 @@
+---
+title: ""
+author: ""
+date: ""
+output: word_document
+---
+
+
+
+```{r setup, include=FALSE}
+# Setup
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+## Libraries
+library(tidyr)
+library(dplyr)
+library(flextable)
+
+## Functions
+expit <- function(log_odds){
+  exp(log_odds)/(1 + exp(log_odds))
+}
+
+logit <- function(p){
+  log(p/(1-p))
+}
+## Load Data
+
+brfss_prevs <- read.csv("data - clean/BRFSS_HT_AP_prevs.csv")
+yrbs_prevs <- read.csv("data - clean/YRBS_HT_AP_prevs.csv")
+
+prevs <- bind_rows(brfss_prevs, yrbs_prevs)
+
+combined <- readRDS("data - clean/combined.rds")
+```
+```{r f_tables}
+# Make femable table
+## Get total sample size by sex, age + period
+totals <- combined %>%
+  rename("period" = "year") %>% 
+  group_by(sex, period, age) %>% 
+  dplyr::summarize(so = "total",
+                   mean = n(),
+                   se = NA,
+                   logit_pijk = n(),
+                   var = NA,
+                   var_logit_pijk = NA)
+
+prevs %>%
+  bind_rows(totals) %>% 
+  arrange(sex, age, period) %>% 
+  filter(sex == "Female") %>% 
+  select(age, period, so, logit_pijk, var_logit_pijk) %>% 
+  ## Format Phat (CI) for table
+  mutate(table_cell = 
+           ifelse(so == "total", sprintf("N = %.0f", logit_pijk),
+                  sprintf("%.1f (%.1f, %.1f)", 
+                          100*expit(logit_pijk),
+                          100*expit(logit_pijk -
+                                      qnorm(0.975)*sqrt(var_logit_pijk)),
+                          100*expit(logit_pijk +
+                                      qnorm(0.975)*sqrt(var_logit_pijk))))) %>% 
+  ## Make years columns
+  pivot_wider(id_cols = c("age", "so"),
+              values_from = "table_cell",
+              names_from = "period",
+              values_fill = "--") %>% 
+  ## Order rows within age
+  mutate(so = factor(so, levels = c("lesgay", "bi", "dko", "ref", "total"))) %>% 
+  arrange(age, so) %>% 
+  ## Relocate years in proper order
+  relocate("2014", .before = "2015") %>% 
+  relocate("2016", .before = "2017") %>% 
+  relocate("2018", .before = "2019") %>% 
+  relocate("2020", .before = "2021") %>% 
+  ## Capitalize Age column
+  rename("Age" = "age") %>%
+  ## Remove SO column
+  select(-so) %>% 
+  ## Make table
+  flextable() %>% 
+  align(align = "center", part = "all") %>% 
+  ## Caption 
+  set_caption(fp_p = officer::fp_par(text.align = "left"),
+              caption = as_paragraph(
+                as_b("Estimated SO prevalences and 95% confidence intervals (CI) by age and period."),
+                " Note: estimates and standard errorss account for the survey design, ",
+                "and are calculated using the survey package in R. CIs are calculated",
+                " on the log-odds scale and transformed back to the probability scale",
+                " in order to ensure CIs do not extend beyond the interval (0,1).")) %>% 
+  ## Sort out aesthetics for a long table in word
+  paginate(group = "Age", init = FALSE, hdr_ftr = FALSE) %>% 
+  ## Set table width
+  fit_to_width(max_width = 7.5, unit = "in") %>%
+  ## Set font and size
+  fontsize(part = "all", size = 8) %>% 
+  font(part = "all", fontname = "Times New Roman") %>% 
+  ## Change cell height & width
+  height(height = 0.1, part = "body") %>% 
+  width(j = 2:9, width = 7/8, unit = "in") %>% 
+  width(j = 1, width = 0.5, unit = "in") %>% 
+  # bg(bg = "grey80", i = 1:20, j = seq(2, 9, 2)) %>% 
+  ## Change cell white space
+  padding(padding.top = 0.5, padding.bottom = 0.5,
+          padding.left = 4, padding.right = 4, part = "body") %>% 
+  ## Bold header
+  bold(part = "header") %>% 
+  ## Merge ages 
+  merge_v(j = 1) %>% 
+  ## Customize "total" rows
+  bold(i = seq(5, 330, 5), j = 2:9) %>%
+  hline(i = seq(5, 330, 5)) %>% 
+  ## Customize "lesgay" rows
+  color(i = seq(1, 330, 5), j = 2:9,
+        color = "firebrick") %>%
+  ## Customize "bi" rows
+  color(i = seq(2, 330, 5), j = 2:9, 
+        color = "goldenrod") %>%
+  ## customize "dko" rows
+  color(i = seq(3, 330, 5), j = 2:9,
+        color = "forestgreen") %>% 
+  ## customize "ref" rows
+  color(i = seq(4, 330, 5), j = 2:9,
+        color = "navy")
+```
+```{r m_tables}
+prevs %>%
+  bind_rows(totals) %>% 
+  arrange(sex, age, period) %>% 
+  filter(sex == "Female") %>% 
+  select(age, period, so, logit_pijk, var_logit_pijk) %>% 
+  ## Format Phat (CI) for table
+  mutate(table_cell = 
+           ifelse(so == "total", sprintf("N = %.0f", logit_pijk),
+                  sprintf("%.1f (%.1f, %.1f)", 
+                          100*expit(logit_pijk),
+                          100*expit(logit_pijk -
+                                      qnorm(0.975)*sqrt(var_logit_pijk)),
+                          100*expit(logit_pijk +
+                                      qnorm(0.975)*sqrt(var_logit_pijk))))) %>% 
+  ## Make years columns
+  pivot_wider(id_cols = c("age", "so"),
+              values_from = "table_cell",
+              names_from = "period",
+              values_fill = "--") %>% 
+  ## Order rows within age
+  mutate(so = factor(so, levels = c("lesgay", "bi", "dko", "ref", "total"))) %>% 
+  arrange(age, so) %>% 
+  ## Relocate years in proper order
+  relocate("2014", .before = "2015") %>% 
+  relocate("2016", .before = "2017") %>% 
+  relocate("2018", .before = "2019") %>% 
+  relocate("2020", .before = "2021") %>% 
+  ## Capitalize Age column
+  rename("Age" = "age") %>%
+  ## Remove SO column
+  select(-so) %>% 
+  ## Make table
+  flextable() %>% 
+  align(align = "center", part = "all") %>% 
+  set_caption(fp_p = officer::fp_par(text.align = "left"),
+              caption = as_paragraph(
+                as_b("Estimated SO prevalences and 95% confidence intervals (CI) by age and period."),
+                " Note: estimates and standard errorss account for the survey design, ",
+                "and are calculated using the survey package in R. CIs are calculated",
+                " on the log-odds scale and transformed back to the probability scale",
+                " in order to ensure CIs do not extend beyond the interval (0,1).")) %>% 
+  ## Sort out aesthetics for a long table in word
+  paginate(group = "Age", init = FALSE, hdr_ftr = FALSE) %>% 
+  fit_to_width(max_width = 7.5, unit = "in") %>%
+  fontsize(part = "all", size = 8) %>% 
+  font(part = "all", fontname = "Times New Roman") %>% 
+  height(height = 0.1, part = "body") %>% 
+  width(j = 2:9, width = 7/8, unit = "in") %>% 
+  width(j = 1, width = 0.5, unit = "in") %>% 
+  # bg(bg = "grey80", i = 1:20, j = seq(2, 9, 2)) %>% 
+  padding(padding.top = 0.5, padding.bottom = 0.5,
+          padding.left = 4, padding.right = 4, part = "body") %>% 
+  ## Bold header
+  bold(part = "header") %>% 
+  ## Merge ages 
+  merge_v(j = 1) %>% 
+  ## Customize "total" rows
+  bold(i = seq(5, 330, 5), j = 2:9) %>%
+  hline(i = seq(5, 330, 5)) %>% 
+  ## Customize "lesgay" rows
+  color(i = seq(1, 330, 5), j = 2:9,
+        color = "firebrick") %>%
+  ## Customize "bi" rows
+  color(i = seq(2, 330, 5), j = 2:9, 
+        color = "goldenrod") %>%
+  ## customize "dko" rows
+  color(i = seq(3, 330, 5), j = 2:9,
+        color = "forestgreen") %>% 
+  ## customize "ref" rows
+  color(i = seq(4, 330, 5), j = 2:9,
+        color = "navy")
+
+```
