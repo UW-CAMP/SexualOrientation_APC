@@ -216,12 +216,12 @@ n_coh <- 12
 png("plots/SO_Q4/Q4.png", width = 960, height = 600)
    par(mfrow = c(2,2),lend = 1)
    par(mar=c(0,0,0,0))
-   par(oma=c(7,4,4,1))
+   par(oma=c(7,5,4,1))
 #png("plots/SO_Q4/Prevdiff_bi_f_coh_os_baseR.png")
 {
   #par(mfrow = c(1,1),lend = 1)
   plot(plotdat$Cohort_num, plotdat$upper_os_15_17,
-       xlab = "", ylab = "Prevalence Change",
+       xlab = "", ylab = "",
        ylim = y_lims, xlim = c(1, n_coh*2) + c(-0.5, 0.5),
        type = "n", xaxt = 'n', yaxt='n',
        main = "")
@@ -233,7 +233,8 @@ png("plots/SO_Q4/Q4.png", width = 960, height = 600)
   
   axis(2, at = seq(-0.05, 0.065, 0.01), cex.axis = 0.9)
   abline(h = 0)
-
+  mtext("Prevalence Change", 2, 3, cex = 0.8)
+  
   ## 2015 - 2017
   segments(x0 = seq(1, n_coh*2, 2) - .3, y0 = y_lims[1],
            x1 = seq(1, n_coh*2, 2) - .3, y1 = rev(plotdat$upper_os_15_17),
@@ -418,7 +419,7 @@ x_lims <- c(1985, 2007)
   par(lend = 1)
    
   plot(plotdat$Cohort_num, plotdat$diff_15_17,
-       xlab = "", ylab = "Prevalence Change",
+       xlab = "", ylab = "",
        ylim = y_lims, xlim = c(1, n_coh*2) + c(-0.5, 0.5),
        type = "n", xaxt = 'n', yaxt='n',
        main = "")
@@ -430,6 +431,7 @@ x_lims <- c(1985, 2007)
   axis(2, at = seq(-0.05, 0.065, 0.01), cex.axis = 0.9)
   abline(h = 0)
   mtext("Cohort", 1, 5, cex = 0.8)
+  mtext("Prevalence Change", 2, 3, cex = 0.8)
   
   ## 2015 - 2017
   segments(x0 = seq(1, n_coh*2, 2) - .3, y0 = y_lims[1],
