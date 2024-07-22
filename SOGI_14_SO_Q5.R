@@ -3078,3 +3078,9 @@ png("plots/SO_Q5/AP_8panel_logodds.png",
   }
 }
 dev.off()
+
+# Grand proportions for #s in MS body
+
+yrbs21 <- readRDS("data - raw/yrbs21_tomerge.RDS")
+prop.table(tableNA(yrbs21$so_21, yrbs21$sex), 2)
+
