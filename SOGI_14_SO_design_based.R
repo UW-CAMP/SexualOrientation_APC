@@ -106,6 +106,12 @@ prevs_age_per_brfss <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
                             by = ~sex + period + age,
                             design = brfss_des,
                             svymean)
+
+prevs_per_brfss <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
+                         by = ~sex + period,
+                         design = brfss_des,
+                         svymean)
+
 ## YRBS ####
 
 prevs_yrbs <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
@@ -117,6 +123,11 @@ prevs_age_per_yrbs <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
                             by = ~sex + period + age,
                             design = yrbs_des,
                             svymean)
+
+prevs_per_yrbs <- svyby(~lesgay_bin + bi_bin + dko_bin + ref_bin,
+                        by = ~sex + period,
+                        design = yrbs_des,
+                        svymean)
 
 ## YRBS 2021 ####
 
@@ -142,13 +153,20 @@ names(prevs)[names(prevs) %in% paste(c("lesgay","bi", "dko", "ref"),
 
 names(prevs)
 
-
 names(prevs_age_per_brfss)[names(prevs_age_per_brfss) %in%
                              paste(c("lesgay","bi", "dko", "ref"),
                                    "bin", sep = "_")] <- 
   paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
 
 names(prevs_age_per_brfss)
+
+names(prevs_per_brfss)[names(prevs_per_brfss) %in%
+                         paste(c("lesgay","bi", "dko", "ref"),
+                               "bin", sep = "_")] <- 
+  paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
+
+names(prevs_per_brfss)
+
 
 ### YRBS ####
 names(prevs_yrbs)[names(prevs_yrbs) %in% paste(c("lesgay","bi", "dko", "ref"),
@@ -157,13 +175,19 @@ names(prevs_yrbs)[names(prevs_yrbs) %in% paste(c("lesgay","bi", "dko", "ref"),
 
 names(prevs_yrbs)
 
-
 names(prevs_age_per_yrbs)[names(prevs_age_per_yrbs) %in% 
                            paste(c("lesgay","bi", "dko", "ref"), "bin",
                                  sep = "_")] <- 
   paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
 
 names(prevs_age_per_yrbs)
+
+names(prevs_per_yrbs)[names(prevs_per_yrbs) %in% 
+                        paste(c("lesgay","bi", "dko", "ref"), "bin",
+                              sep = "_")] <- 
+  paste0("mean.", c("lesgay","bi", "dko", "ref"), "_bin")
+
+names(prevs_per_yrbs)
 
 ### YRBS 2021 ####
 names(prevs_yrbs_2021)[names(prevs_yrbs_2021) %in%
@@ -210,6 +234,24 @@ prevs_age_per_brfss_long <- prevs_age_per_brfss %>%
 write.csv(prevs_age_per_brfss_long, row.names = FALSE,
           file = paste0("data - clean/", "BRFSS_HT_AP_prevs.csv"))
 
+prevs_per_brfss_long <- prevs_per_brfss %>% 
+  pivot_longer(cols = contains("_bin"),
+               names_to = c(".value", "so"),
+               names_pattern = "(.*)\\.(.*)_bin") %>% 
+  ## Calculate logit(phat)
+  ## And var(logit(phat)) = var(phat)/[phat^2*(1-phat)^2]
+  ## via delta method
+  mutate(logit_pijk = logit(mean),
+         var = se^2,
+         var_logit_pijk = var/(mean^2*(1-mean)^2))
+
+write.csv(prevs_per_brfss_long, row.names = FALSE,
+          file = paste0("data - clean/", "BRFSS_HT_P_prevs.csv"))
+write.csv(prevs_per_brfss_long %>% 
+            filter(period == 2015 | period == 2021) %>% 
+            filter(so == "lesgay" | so == "bi"), row.names = FALSE,
+          file = paste0("data - clean/", "BRFSS_HT_P_15_21_prevs.csv"))
+
 ### YRBS ####
 prevs_yrbs_long <- prevs_yrbs %>% 
   pivot_longer(cols = contains("_bin"),
@@ -240,7 +282,23 @@ prevs_age_per_yrbs_long <- prevs_age_per_yrbs %>%
 write.csv(prevs_age_per_yrbs_long, row.names = FALSE,
           file = paste0("data - clean/", "YRBS_HT_AP_prevs.csv"))
 
+prevs_per_yrbs_long <- prevs_per_yrbs %>% 
+  pivot_longer(cols = contains("_bin"),
+               names_to = c(".value", "so"),
+               names_pattern = "(.*)\\.(.*)_bin") %>% 
+  ## Calculate logit(phat)
+  ## And var(logit(phat)) = var(phat)/[phat^2*(1-phat)^2]
+  ## via delta method
+  mutate(logit_pijk = logit(mean),
+         var = se^2,
+         var_logit_pijk = var/(mean^2*(1-mean)^2))
 
+write.csv(prevs_per_yrbs_long, row.names = FALSE,
+          file = paste0("data - clean/", "YRBS_HT_P_prevs.csv"))
+write.csv(prevs_per_yrbs_long %>% 
+            filter(period == 2015 | period == 2021) %>% 
+            filter(so == "lesgay" | so == "bi"), row.names = FALSE,
+          file = paste0("data - clean/", "YRBS_HT_P_15_21_prevs.csv"))
 
 ### YRBS 2021 ####
 prevs_yrbs_2021_long <- prevs_yrbs_2021 %>% 
