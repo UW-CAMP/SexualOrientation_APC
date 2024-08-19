@@ -30,6 +30,10 @@ names(yrbs21) <- tolower(names(yrbs21)) # make variable names lowercase
 yrbs21 <- yrbs21 %>% mutate(id = row_number()) # generate an index variable (id)
 yrbs21[yrbs21 == "Missing"] <- NA # make "missing" NA
 
+## Calc missingness on sex and age
+mean(is.na(yrbs21$q1)) # age
+mean(is.na(yrbs21$q2)) # sex
+
 ### Remove observations with missing for sex, age -------
 yrbs21 <- subset(yrbs21, !is.na(q1) & !is.na(q2))
 

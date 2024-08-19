@@ -89,6 +89,9 @@ for (year in brfss_years) {
    brfss[[year]]$age <- brfss[[year]]$`_AGE80`
 }
 
+# calcuate missingness
+sapply(brfss_years, function(x) mean(is.na(brfss[[x]]$age))) # none
+
 # * restrict to those under 80 -----
 for (year in brfss_years) {
    brfss[[year]] <- subset(brfss[[year]], age < 80)
@@ -126,6 +129,11 @@ for (year in 19:max(brfss_years)) {
                                levels = 1:2,
                                labels = c("Male", "Female"))
 }
+
+
+# calcuate missingness
+sapply(brfss_years, function(x) mean(is.na(brfss[[x]]$sex))) # none
+
 
 # * sex_bin -------
 for (yr in brfss_years) {

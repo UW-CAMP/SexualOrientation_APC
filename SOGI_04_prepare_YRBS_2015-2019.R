@@ -32,6 +32,12 @@ for (yr in yrbs_years) {
 }
 
 # data management --------
+
+## Calc missingness on sex and age
+sapply(yrbs_years, function(x) mean(is.na(yrbs[[x]]$age))) # age
+sapply(yrbs_years, function(x) mean(is.na(yrbs[[x]]$sex))) # sex
+
+
 # * age ----------
 for (yr in yrbs_years) {
    yrbs[[yr]]$age_cat <- factor(yrbs[[yr]]$age,
