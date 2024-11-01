@@ -1,25 +1,27 @@
-# SOGI
-CAMP 60
+### Sexual orientation in the United States, 2014-2021: age, period and cohort effects
 
-To recreate this analysis, you will need access to SAS and RStudio. Original work done in the software and operating system environments indicated below.
+### Replication instructions
 
-SAS version 9.4 in Windows:
-Edition	Windows Server 2022 Datacenter
-Version	21H2
-Installed on	‎10/‎30/‎2022
-OS build	20348.1487
+**Full citation**: Pending.
 
-RStudio Version 2022.12.0+353 (2022.12.0+353), R Version 4.1.0 (2021-05-18) in Mac OS 13.1
+**Software**: To recreate this analysis, you will need access to SAS and RStudio. Original work was conducted in the software and operating system environments:
 
-**Step 1: Prepare Data Sets**
+[Who put these in here? Are they up to date?]
+- SAS version 9.4 in Windows: Edition	Windows Server 2022 Datacenter Version 21H2 Installed on ‎10/‎30/‎2022 OS build 20348.1487
+- RStudio Version 2022.12.0+353 (2022.12.0+353), R Version 4.1.0 (2021-05-18) in Mac OS 13.1
+
+**Step 1: Obtain and preepare YRBS datasets**
 
 The YRBS National Data Set for 2019 and years prior can be found here: https://www.cdc.gov/healthyyouth/data/yrbs/sadc_2019/sadc_2019_national.dat 
 
 The YRBS National Data Set for 2021 can be found here: https://www.cdc.gov/healthyyouth/data/yrbs/files/2021/XXH2021_YRBS_Data.dat
 
 Note: Both YRBS data sets are too large to store on GitHub; you must download them locally to reproduce the present analyses. To do this, use the corresponding Format and Input SAS programs, each modified from CDC for the present analysis. These are available in this repository as “YRBS SAS Formats” and “YRBS SAS Input” for the 2019 and prior years file and as "2021 YRBS SAS Formats" and 2021 YRBS SAS Input" for the 2021 data set. 
+[These files are not here]
 
-SAS program instructions: To generate the YRBS 2021 dataset, you must first open the script named "2021 YRBS SAS Formats.sas" in the SAS program. The heading of the file contains specific instructions to properly save the data format file. After successfully running this file, you may then run the script named "2021 YRBS SAS Inputs.sas" Again, the heading contains specific instructions to properly execute the file. Next, to generate the 2015-2019 dataset, similarly run and following corresponding instructions for the scripts "YRBS SAS Formats.sas" and "YRBS SAS Inputs.sas", respectively. After running these files, you will have produced the needed YRBS datasets to for the analyses.
+SAS program instructions: To generate the YRBS 2021 dataset, you must first open the script named "2021 YRBS SAS Formats.sas" within SAS. The heading of the file contains specific instructions to properly save the data format file. After successfully running this file, you may then run the script named "2021 YRBS SAS Inputs.sas". Again, the heading contains specific instructions to properly execute the file. Next, to generate the 2015-2019 dataset, similarly run and following corresponding instructions for the scripts "YRBS SAS Formats.sas" and "YRBS SAS Inputs.sas", respectively. After running these files, you will have produced the needed YRBS datasets to for the analyses.
+
+**Step 2: Obtain and prepare BRFSS datasets**
 
 The BRFSS datasets can be found here: https://www.cdc.gov/brfss/annual_data/annual_data.htm 
 
