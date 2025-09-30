@@ -25,7 +25,8 @@ tableNA(combo$so)
 tableNA(combo$so_new)
 
 
-table_sampsize <- combo %>% 
+table_sampsize <- combo %>%
+  filter(!(source == "YRBS" & age == 18)) %>% 
   group_by(year, so_new) %>% 
   tally() %>% 
   ungroup() %>% 
@@ -41,7 +42,8 @@ table_sampsize <- combo %>%
          "Lesbian/Gay" = "2_lesgay",
          "Bisexual" = "3_bi",
          "Other response" = "4_dko",
-         "Declined to Answer" = "5_ref")
+         "Declined to Answer" = "5_ref") %>% 
+  mutate(Straight = N - `Sexual Minority`)
 
 table_sampsize %>% 
   View()
