@@ -26,3 +26,8 @@ library(weights) # for using chi squared test with weighted data
 library(survey) # for weighted prev estimates and 95% CI (comparing 18 YO)
 library(ggplot2)
 library(gplots)
+
+# install.packages("INLA",
+#                  repos=c(getOption("repos"),
+#                          INLA="https://inla.r-inla-download.org/R/stable"))
+library(INLA)
