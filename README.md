@@ -12,11 +12,9 @@
 
 **Step 1: Obtain and preepare YRBS datasets**
 
-The YRBS National Data Set for 2019 and years prior can be found here: https://www.cdc.gov/healthyyouth/data/yrbs/sadc_2019/sadc_2019_national.dat 
+The YRBS National Data Sets can be found here: https://www.cdc.gov/yrbs/data/national-yrbs-datasets-documentation.html
 
-The YRBS National Data Set for 2021 can be found here: https://www.cdc.gov/healthyyouth/data/yrbs/files/2021/XXH2021_YRBS_Data.dat
-
-Note: Both YRBS data sets are too large to store on GitHub; you must download them locally to reproduce the present analyses. To do this, use the corresponding Format and Input SAS programs, each modified from CDC for the present analysis. These are available in this repository as “YRBS SAS Formats” and “YRBS SAS Input” for the 2019 and prior years file and as "2021 YRBS SAS Formats" and 2021 YRBS SAS Input" for the 2021 data set. 
+Note: The YRBS data sets are too large to store on GitHub; you must download them locally to reproduce the present analyses. To do this, use the corresponding Format and Input SAS programs, each modified from CDC for the present analysis. These are available in this repository as “YRBS SAS Formats” and “YRBS SAS Input” for the 2019 and prior years file and as "2021 YRBS SAS Formats" and 2021 YRBS SAS Input" for the 2021 data set. 
 [These files are not here]
 
 SAS program instructions: To generate the YRBS 2021 dataset, you must first open the script named "2021 YRBS SAS Formats.sas" within SAS. The heading of the file contains specific instructions to properly save the data format file. After successfully running this file, you may then run the script named "2021 YRBS SAS Inputs.sas". Again, the heading contains specific instructions to properly execute the file. Next, to generate the 2015-2019 dataset, similarly run and following corresponding instructions for the scripts "YRBS SAS Formats.sas" and "YRBS SAS Inputs.sas", respectively. After running these files, you will have produced the needed YRBS datasets to for the analyses.
