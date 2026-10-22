@@ -6,7 +6,6 @@
 
 **Software**: To recreate this analysis, you will need access to SAS and RStudio. Original work was conducted in the software and operating system environments:
 
-[Who put these in here? Are they up to date?]
 - SAS version 9.4 in Windows: Edition	Windows Server 2022 Datacenter Version 21H2 Installed on ‎10/‎30/‎2022 OS build 20348.1487
 - RStudio Version 2022.12.0+353 (2022.12.0+353), R Version 4.1.0 (2021-05-18) in Mac OS 13.1
 
